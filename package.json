@@ -6,7 +6,8 @@
   "files": [
     "jeelabs.coffee",
     "README.md",
-    "jeelabs-config-schema.coffee"
+    "jeelabs-config-schema.coffee",
+    "device-config-schema.coffee"
   ],
   "version": "0.8.2",
   "homepage": "http://your-plugin-website",
