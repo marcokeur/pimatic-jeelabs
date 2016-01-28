@@ -1,4 +1,5 @@
-{ "name": "pimatic-jeelabs",
+{
+  "name": "pimatic-jeelabs",
   "description": "The plugin description",
   "author": "Your Name <you@example.com> (http://your-website)",
   "main": "jeelabs",
@@ -7,7 +8,7 @@
     "README.md",
     "jeelabs-config-schema.coffee"
   ],
-  "version": "0.8.0",
+  "version": "0.8.1",
   "homepage": "http://your-plugin-website",
   "repository": {
     "type": "git",
@@ -15,7 +16,7 @@
   },
   "configSchema": "jeelabs-config-schema.coffee",
   "dependencies": {
-     "serialport": "^1.7.1"
+    "serialport": "^1.7.1"
   },
   "peerDependencies": {
     "pimatic": "0.8.*"
