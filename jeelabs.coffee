@@ -55,18 +55,18 @@ module.exports = (env) ->
     attributes:
       temperature:
         description: "the measured temperature"
-        type: 'string'
+        type: 'number'
         unit: '°C'
       motion:
         description: "is there motion detected"
         type: 'boolean'
       humidity:
         description: "the measured humidity"
-        type: 'string'
+        type: 'number'
         unit: '%' 
       light:
         description: "the measured light"
-        type: 'string'
+        type: 'number'
         unit: '%' 
 
     _temperature: null
@@ -91,7 +91,7 @@ module.exports = (env) ->
       @_light = Number((packet[2] / 255 * 100)).toFixed()
 
       #parse humidity
-      @_humidity = packet[3] >> 1
+      @_humidity = Number(packet[3] >> 1)
 
       #parse motion
       if (packet[3] & 1) == 0
