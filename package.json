@@ -1,0 +1,28 @@
+{ "name": "pimatic-jeelabs",
+  "description": "The plugin description",
+  "author": "Your Name <you@example.com> (http://your-website)",
+  "main": "jeelabs",
+  "files": [
+    "jeelabs.coffee",
+    "README.md",
+    "jeelabs-config-schema.coffee"
+  ],
+  "version": "0.8.0",
+  "homepage": "http://your-plugin-website",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pimatic/pimatic-plugin-template.git"
+  },
+  "configSchema": "jeelabs-config-schema.coffee",
+  "dependencies": {
+     "serialport": "^1.7.1"
+  },
+  "peerDependencies": {
+    "pimatic": "0.8.*"
+  },
+  "engines": {
+    "node": ">0.8.x",
+    "npm": ">1.1.x"
+  }
+}
