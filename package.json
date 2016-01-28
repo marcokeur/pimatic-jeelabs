@@ -9,7 +9,7 @@
     "jeelabs-config-schema.coffee",
     "device-config-schema.coffee"
   ],
-  "version": "0.8.2",
+  "version": "0.8.3",
   "homepage": "http://your-plugin-website",
   "repository": {
     "type": "git",
