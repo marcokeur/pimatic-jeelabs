@@ -9,7 +9,6 @@
   ],
   "version": "0.8.0",
   "homepage": "http://your-plugin-website",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/pimatic/pimatic-plugin-template.git"
