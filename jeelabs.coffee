@@ -88,7 +88,7 @@ module.exports = (env) ->
       @_temperature = Number(tmp.substring(0,2) + '.' + tmp.substring(secondhalf))
 
       #parse light
-      @_light = Number((packet[2] / 255 * 100)).toFixed()
+      @_light = Number(Number((packet[2] / 255 * 100)).toFixed())
 
       #parse humidity
       @_humidity = Number(packet[3] >> 1)
