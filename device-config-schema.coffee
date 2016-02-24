@@ -5,9 +5,17 @@ module.exports = {
   Roomnode: {
     type: "object"
     properties:
-      deviceid:
+      nodeid:
         description: "The id of this node"
-        type: "string"
-        default: "foo"
+        type: "integer"
+        default: 0
+  },
+  RGBRemote: {
+    type: "object"
+    properties:
+      nodeid:
+        description: "The id of this node"
+        type: "integer"
+        default: 0
   }
 }

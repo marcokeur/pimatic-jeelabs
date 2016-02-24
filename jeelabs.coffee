@@ -13,42 +13,90 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
       deviceConfigDef = require("./device-config-schema")
+      serial = new SerialPort @config.port, {baudrate: 57600, parser: serialport.parsers.readline("\n")}
 
       @framework.deviceManager.registerDeviceClass("Roomnode", {
         configDef: deviceConfigDef.Roomnode,
-        createCallback: (config) => 
+        createCallback: (config) =>
           roomnode = new Roomnode(config)
           devices.push roomnode
           return roomnode
       })
 
-      serial = new SerialPort @config.port, {baudrate: 57600, parser: serialport.parsers.readline("\n")}
-      serial.on 'open', =>
-        callback = -> serial.write('h\r\n')
-        setTimeout callback, 10000
+      @framework.deviceManager.registerDeviceClass("RGBRemote", {
+        configDef: deviceConfigDef.RGBRemote,
+        createCallback: (config) =>
+          rgbremote = new RGBRemote(config, serial)
+          return rgbremote
+      })
 
+      #when the serialport is opened
+      serial.on 'open', =>
+        #configure the jeelink to use the groupId from the configfile
+        setTimeout ( =>
+          serial.write(@config.group + 'g\r\n')
+        ), 5000
+
+      #when we received data on the jeelink
       serial.on 'data', (data) =>
         msg = data.toString 'utf8'
+
+        #and the length of the msg is not longer then 300 chars
         if msg.length < 300
           tokens = msg.split(' ')
 
+          #test if the msg matches on configuration regex
           match = msg.match(rf12ConfigRegex)
+
+          #if there is a match
           if match
+
+            #save the configuration for later use
             env.logger.info('CONFIG ' + msg)
             rf12Config = { recvid: +match[1], group: +match[2], band: +match[3] }
-          
+
+          #else, if the message starts with OK
           else if(tokens.shift() == 'OK')
-            #this is een jeelabs protocol package
-            env.logger.info('MSG ' + tokens)
 
-            groupId = tokens[0].substring(1)
-            nodeId = tokens[1] & 0x1F;
+            #this is een jeelabs protocol package, extract the nodeId
+            nodeId = tokens[0] & 0x1F;
 
+            #if the config is already known, i.e. all settings are known..
             if(rf12Config)
-              prefix = "rf12-" + rf12Config.band + ":" + groupId + ":" + nodeId
+              #find the corresponding device
               for d in devices
-                if(d.getDeviceId() == prefix)
+                if(d.getNodeId() == nodeId)
+                  #and let it parse the received package
                   d.parsePacket(tokens)
+
+
+  class RGBRemote extends env.devices.DimmerActuator
+
+    constructor: (config, serial) ->
+      @name = config.name
+      @id = config.id
+      @jeelink = serial
+      @config = config
+      super()
+
+    changeDimlevelTo: (dimlevel) =>
+      #set the dimlevel to the DimmerActuator superclass
+      @_setDimlevel dimlevel
+
+      #recalculate because the RGBRemote ranges from 0-255
+      dimlevel = Math.round(dimlevel * 2.55)
+
+      #assemble a message containing preconfigured RGB and add the dimlevel
+      #also attach the configured nodeId
+      message = @config.red + ',' + @config.green + ',' + @config.blue + ',' + dimlevel +
+          ',' + @config.red + ',' + @config.green + ',' + @config.blue + ',' + dimlevel +
+          ',' + @config.nodeid + 's' + '\r\n'
+      #and write the message to the jeelink
+      @jeelink.write message
+
+      #send a toast to the UI
+      env.logger.info 'wrote ' + message + ' to ' + @config.nodeid
+      return Promise.resolve()
 
   class Roomnode extends env.devices.Device
 
@@ -63,11 +111,11 @@ module.exports = (env) ->
       humidity:
         description: "the measured humidity"
         type: 'number'
-        unit: '%' 
+        unit: '%'
       light:
         description: "the measured light"
         type: 'number'
-        unit: '%' 
+        unit: '%'
 
     _temperature: null
     _motion: null
@@ -76,25 +124,25 @@ module.exports = (env) ->
     _deviceId: null
 
     constructor: (@config) ->
-      @_deviceId = @config.deviceid
+      #@_deviceId = @config.deviceid
       @name = @config.name
       @id = @config.id
       super()
-    
+
     parsePacket: (packet) ->
       #parse temperature
-      tmp = (((256 * (packet[5]&3) + packet[4]) ^ 512) - 512).toString()
+      tmp = (((256 * (packet[4]&3) + packet[3]) ^ 512) - 512).toString()
       secondhalf = tmp.length - 1
       @_temperature = Number(tmp.substring(0,2) + '.' + tmp.substring(secondhalf))
 
       #parse light
-      @_light = Number(Number((packet[2] / 255 * 100)).toFixed())
+      @_light = Number(Number((packet[1] / 255 * 100)).toFixed())
 
       #parse humidity
-      @_humidity = Number(packet[3] >> 1)
+      @_humidity = Number(packet[2] >> 1)
 
       #parse motion
-      if (packet[3] & 1) == 0
+      if (packet[2] & 1) == 0
         @_motion = false
       else
         @_motion = true
@@ -109,7 +157,7 @@ module.exports = (env) ->
     getHumidity: -> Promise.resolve(@_humidity)
     getMotion: -> Promise.resolve(@_motion)
 
-    getDeviceId: -> @_deviceId
+    getNodeId: -> @config.nodeid
 
 
   jeelabs = new Jeelabs

@@ -1,7 +1,7 @@
 {
   "name": "pimatic-jeelabs",
-  "description": "The plugin description",
-  "author": "Your Name <you@example.com> (http://your-website)",
+  "description": "A plugin to connect some jeenodes to Pimatic.",
+  "author": "Marco Keur <marco@precision-it.nl> (http://precision-it.nl)",
   "main": "jeelabs",
   "files": [
     "jeelabs.coffee",
@@ -10,10 +10,10 @@
     "device-config-schema.coffee"
   ],
   "version": "0.8.4",
-  "homepage": "http://your-plugin-website",
+  "homepage": "http://precision-it.nl",
   "repository": {
     "type": "git",
-    "url": "git://github.com/pimatic/pimatic-plugin-template.git"
+    "url": "git://github.com/marcokeur/pimatic-jeelabs.git"
   },
   "configSchema": "jeelabs-config-schema.coffee",
   "dependencies": {
