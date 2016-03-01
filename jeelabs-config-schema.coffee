@@ -1,11 +1,15 @@
 # #my-plugin configuration options
-# Declare your config option for your plugin here. 
+# Declare your config option for your plugin here.
 module.exports = {
   title: "my plugin config options"
   type: "object"
   properties:
-    option1:
-      description: "Some option"
+    port:
+      description: "The tty the jeelink is connected to."
       type: "string"
-      default: "foo"
+      default: "/dev/null"
+    group:
+      description: "The groupid of the network the jeelinks are using."
+      type: "number"
+      default: 33
 }

@@ -1,5 +1,3 @@
-# #my-plugin configuration options
-# Declare your config option for your plugin here.
 module.exports = {
   title: "jeelabs devices config schema"
   Roomnode: {
@@ -17,5 +15,17 @@ module.exports = {
         description: "The id of this node"
         type: "integer"
         default: 0
+      red:
+        description: "The red value"
+        type: "integer"
+        default: 200
+      green:
+        description: "The green value"
+        type: "integer"
+        default: 200
+      blue:
+        description: "The blue value"
+        type: "integer"
+        default: 200
   }
 }
