@@ -5,8 +5,6 @@
   "main": "jeelabs",
   "files": [
     "jeelabs.coffee",
-    "rgbremote.coffee",
-    "roomnode.coffee",
     "README.md",
     "jeelabs-config-schema.coffee",
     "device-config-schema.coffee"
