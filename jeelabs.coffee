@@ -104,6 +104,9 @@ module.exports = (env) ->
         env.logger.info 'Dimmed RGBRemote ' + @config.nodeid + ' to ' + dimPercentage + '%'
         return Promise.resolve()
 
+      destroy: () ->
+        super()
+
     class Roomnode extends env.devices.Device
 
       attributes:
@@ -166,6 +169,8 @@ module.exports = (env) ->
 
       getNodeId: -> @config.nodeid
 
+      destroy: () ->
+        super()
 
   jeelabs = new Jeelabs
   return jeelabs
