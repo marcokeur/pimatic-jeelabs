@@ -20,7 +20,7 @@ Currently there is support for the following sketches:
         "active": true
       }
       ...
-      "devcies" : [
+      "devices" : [
       {
         "id": "EC3000TestDevice",
         "class": "EC3000",
