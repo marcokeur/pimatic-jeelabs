@@ -18,15 +18,15 @@ Currently there is support for the following sketches:
         "port": "/dev/ttyUSB0",
         "simpleParser": true,
         "active": true
-      }
+      },
       ...
       "devices" : [
       {
         "id": "EC3000TestDevice",
         "class": "EC3000",
-        "name": "EC3000 Energy Monitor"
+        "name": "EC3000 Energy Monitor",
         "nodeid": 23867
-      }
+      },
       ]
       ...
 
