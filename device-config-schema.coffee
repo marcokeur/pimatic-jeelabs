@@ -27,5 +27,13 @@ module.exports = {
         description: "The blue value"
         type: "integer"
         default: 200
-  }
+  },
+  EC3000: {
+    type: "object"
+    properties:
+      nodeid:
+        description: "The id of this node"
+        type: "integer"
+        default: 0
+  },
 }
